@@ -1,1 +1,33 @@
 <p> <%= @user.username %> || <%= @user.email %> </p>
+
+<div class="container">
+  <p>
+    <strong>Nom :</strong>
+    <%= @user.username %>
+  </p>
+
+  <p>Amis de <strong> <%= @user.username %> </strong> </p>
+
+  <ol>
+    <% @user.friends.each do |friend| %>
+      <li>
+        <%= friend.username %>
+        <% if @user == current_user %>
+          <%= link_to 'Retirer de la liste d\'amis', invitation_path(invitation_id: Invitation.find_invitation(@user.id, friend.id)), class:'btn btn-danger'  %>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+
+  <p> les demande d'amis pour <strong> <%= @user.username %> </strong> </p>
+
+  <ol>
+    <% @user.pending_invitations.each do |invitation| %>
+      <li>
+        <%= User.find(invitation.user_id).username %>
+        <%= link_to "Accepter l'invitation", invitation_path(invitation_id: invitation.id), method: :patch, class:"btn btn-success" %>
+        <%= link_to "Rejeter l'invitation", invitation_path(invitation_id: invitation.id), method: :delete, class:"btn btn-warning" %>
+      </li>
+    <% end %>
+  </ol>
+</div>
